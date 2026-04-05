@@ -1,0 +1,166 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>SecureEye — Multi-Camera View</title>
+    <link rel="stylesheet" href="styles.css" />
+    <link rel="preconnect" href="https://fonts.googleapis.com" />
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800;900&display=swap" rel="stylesheet" />
+    <style>
+        .view-mode-switch {
+            position: absolute;
+            top: 20px;
+            right: 20px;
+            z-index: 100;
+            display: flex;
+            gap: 8px;
+        }
+        .view-btn {
+            padding: 10px 16px;
+            background: rgba(20, 20, 20, 0.9);
+            border: 1px solid #333;
+            border-radius: 8px;
+            color: #e4e8ef;
+            cursor: pointer;
+            font-size: 13px;
+            font-weight: 500;
+            transition: all 0.2s;
+        }
+        .view-btn.active {
+            background: #ef4444;
+            border-color: #ef4444;
+        }
+        .multi-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(500px, 1fr));
+            gap: 20px;
+            padding: 80px 20px 20px;
+            max-width: 1800px;
+            margin: 0 auto;
+        }
+        .cam-card {
+            background: rgba(20, 20, 20, 0.8);
+            border: 1px solid #333;
+            border-radius: 12px;
+            overflow: hidden;
+            transition: all 0.3s;
+        }
+        .cam-card:hover {
+            border-color: #ef4444;
+            transform: translateY(-2px);
+        }
+        .cam-header {
+            padding: 16px;
+            background: rgba(0, 0, 0, 0.5);
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+        }
+        .cam-title {
+            font-weight: 600;
+            font-size: 15px;
+        }
+        .cam-status {
+            padding: 4px 12px;
+            border-radius: 4px;
+            font-size: 11px;
+            font-weight: 600;
+            text-transform: uppercase;
+        }
+        .cam-status.online {
+            background: rgba(16, 185, 129, 0.2);
+            color: #10b981;
+        }
+        .cam-status.offline {
+            background: rgba(107, 114, 128, 0.2);
+            color: #6b7280;
+        }
+        .cam-viewport-multi {
+            position: relative;
+            width: 100%;
+            aspect-ratio: 16/9;
+            background: #000;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+        }
+        .cam-viewport-multi img {
+            width: 100%;
+            height: 100%;
+            object-fit: cover;
+        }
+        .cam-placeholder {
+            color: #666;
+            font-size: 48px;
+        }
+        .cam-footer {
+            padding: 12px 16px;
+            display: flex;
+            gap: 16px;
+            font-size: 12px;
+            color: #888;
+        }
+        .cam-stat-item {
+            display: flex;
+            flex-direction: column;
+            gap: 2px;
+        }
+        .cam-stat-label {
+            font-size: 10px;
+            text-transform: uppercase;
+            letter-spacing: 0.5px;
+        }
+        .cam-stat-value {
+            font-weight: 600;
+            color: #e4e8ef;
+        }
+        .no-cameras {
+            text-align: center;
+            padding: 100px 20px;
+            color: #666;
+        }
+        .no-cameras-icon {
+            font-size: 64px;
+            margin-bottom: 16px;
+        }
+    </style>
+</head>
+<body>
+    <header class="topbar">
+        <div class="topbar-left">
+            <div class="brand">
+                <span class="brand-icon">🛡️</span>
+                <span class="brand-name">Secure<span class="brand-accent">Eye</span></span>
+            </div>
+            <span class="version-badge">Multi-Cam View</span>
+        </div>
+        <div class="topbar-center">
+            <div class="status-pill" id="totalCameras">
+                <span class="status-dot online"></span>
+                <span>0 Cameras</span>
+            </div>
+        </div>
+        <div class="topbar-right">
+            <span class="clock" id="clock">--:--:--</span>
+            <button class="icon-btn" id="btnLogout" title="Logout">🚪</button>
+        </div>
+    </header>
+
+    <div class="view-mode-switch">
+        <button class="view-btn" onclick="window.location.href='/index.html'">📹 My Camera</button>
+        <button class="view-btn active">🎬 All Cameras</button>
+    </div>
+
+    <div class="multi-grid" id="cameraGrid">
+        <div class="no-cameras">
+            <div class="no-cameras-icon">📷</div>
+            <h2>No Cameras Connected</h2>
+            <p>Open SecureEye on other devices to see them here</p>
+        </div>
+    </div>
+
+    <script type="module" src="multi-view.js"></script>
+</body>
+</html>

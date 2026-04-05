@@ -1,0 +1,21 @@
+{
+  "expo": {
+    "name": "MailBox",
+    "slug": "mailbox-app",
+    "version": "1.0.0",
+    "orientation": "portrait",
+    "userInterfaceStyle": "dark",
+    "ios": {
+      "supportsTablet": false,
+      "bundleIdentifier": "com.yourname.mailbox"
+    },
+    "android": {
+      "package": "com.yourname.mailbox"
+    },
+    "extra": {
+      "eas": {
+        "projectId": "624003d5-c9e8-479d-a3c1-6fa157a7e7ca"
+      }
+    }
+  }
+}

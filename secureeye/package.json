@@ -1,0 +1,20 @@
+{
+  "name": "secureeye",
+  "version": "1.0.0",
+  "private": true,
+  "description": "SecureEye — Production-grade security camera system monorepo",
+  "workspaces": [
+    "shared",
+    "backend",
+    "laptop-cctv"
+  ],
+  "scripts": {
+    "backend:dev": "npm run dev --workspace=backend",
+    "cctv:dev": "npm run dev --workspace=laptop-cctv",
+    "dev": "npm run backend:dev & npm run cctv:dev"
+  },
+  "engines": {
+    "node": ">=18.0.0"
+  },
+  "license": "MIT"
+}

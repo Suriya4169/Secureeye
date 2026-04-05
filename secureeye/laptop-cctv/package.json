@@ -1,0 +1,17 @@
+{
+    "name": "@secureeye/laptop-cctv",
+    "version": "2.0.0",
+    "private": true,
+    "description": "SecureEye CCTV — Shinobi-inspired browser-based surveillance with hand detection",
+    "main": "server.js",
+    "scripts": {
+        "dev": "node server.js",
+        "start": "node server.js"
+    },
+    "dependencies": {
+        "dotenv": "^16.3.1",
+        "express": "^4.18.2",
+        "nodemailer": "^6.10.1",
+        "ws": "^8.16.0"
+    }
+}

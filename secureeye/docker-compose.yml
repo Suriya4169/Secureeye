@@ -1,0 +1,63 @@
+version: '3.8'
+
+services:
+  # PostgreSQL (local dev — use Supabase cloud in production)
+  postgres:
+    image: postgres:15-alpine
+    container_name: secureeye-postgres
+    environment:
+      POSTGRES_USER: secureeye
+      POSTGRES_PASSWORD: secureeye_dev_password
+      POSTGRES_DB: secureeye
+    ports:
+      - '5432:5432'
+    volumes:
+      - postgres_data:/var/lib/postgresql/data
+      - ./supabase/migrations:/docker-entrypoint-initdb.d
+    healthcheck:
+      test: ['CMD-SHELL', 'pg_isready -U secureeye']
+      interval: 5s
+      timeout: 5s
+      retries: 5
+
+  # Redis (local dev — use Upstash in production)
+  redis:
+    image: redis:7-alpine
+    container_name: secureeye-redis
+    ports:
+      - '6379:6379'
+    volumes:
+      - redis_data:/data
+    healthcheck:
+      test: ['CMD', 'redis-cli', 'ping']
+      interval: 5s
+      timeout: 5s
+      retries: 5
+
+  # Backend API + WebSocket server
+  backend:
+    build:
+      context: ./backend
+      dockerfile: Dockerfile
+    container_name: secureeye-backend
+    environment:
+      NODE_ENV: development
+      PORT: 3000
+      WS_PORT: 3001
+      REDIS_URL: redis://redis:6379
+      DATABASE_URL: postgresql://secureeye:secureeye_dev_password@postgres:5432/secureeye
+    ports:
+      - '3000:3000'
+      - '3001:3001'
+    depends_on:
+      postgres:
+        condition: service_healthy
+      redis:
+        condition: service_healthy
+    volumes:
+      - ./backend/src:/app/src
+    command: npm run dev
+
+volumes:
+  postgres_data:
+  redis_data:

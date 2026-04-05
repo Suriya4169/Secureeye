@@ -1,0 +1,43 @@
+# Dependencies
+node_modules/
+
+# Environment
+.env
+.env.local
+.env.*.local
+
+# Build outputs
+dist/
+build/
+.next/
+out/
+
+# Logs
+*.log
+npm-debug.log*
+
+# OS
+.DS_Store
+Thumbs.db
+
+# IDE
+.vscode/
+.idea/
+*.swp
+*.swo
+
+# Electron
+laptop-cctv/dist/
+
+# Expo
+mobile-app/.expo/
+mobile-app/android/
+mobile-app/ios/
+
+# Supabase
+supabase/.temp/
+
+# Firebase
+google-services.json
+GoogleService-Info.plist
+firebase-admin-key.json

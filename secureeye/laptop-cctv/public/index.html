@@ -1,0 +1,211 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>SecureEye — CCTV Surveillance</title>
+    <link rel="stylesheet" href="styles.css" />
+    <link rel="preconnect" href="https://fonts.googleapis.com" />
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800;900&display=swap"
+        rel="stylesheet" />
+</head>
+
+<body>
+    <!-- ===== Top Navigation Bar ===== -->
+    <header class="topbar">
+        <div class="topbar-left">
+            <div class="brand">
+                <span class="brand-icon">🛡️</span>
+                <span class="brand-name">Secure<span class="brand-accent">Eye</span></span>
+            </div>
+            <span class="version-badge">v2.0</span>
+        </div>
+        <div class="topbar-center">
+            <div class="status-pill" id="cameraStatus">
+                <span class="status-dot offline"></span>
+                <span>Camera</span>
+            </div>
+            <div class="status-pill" id="backendStatus">
+                <span class="status-dot offline"></span>
+                <span>Backend</span>
+            </div>
+            <div class="status-pill" id="detectionStatus">
+                <span class="status-dot offline"></span>
+                <span>Detection</span>
+            </div>
+        </div>
+        <div class="topbar-right">
+            <button class="icon-btn" id="btnMultiView" title="Multi-Camera View">🎬</button>
+            <span class="clock" id="clock">--:--:--</span>
+            <button class="icon-btn" id="btnSettings" title="Settings">⚙️</button>
+        </div>
+    </header>
+
+    <!-- ===== Main Dashboard ===== -->
+    <main class="dashboard">
+        <!-- Left: Camera Grid -->
+        <section class="camera-grid">
+            <!-- Primary Camera (Live) -->
+            <div class="camera-card primary" id="primaryCamera">
+                <div class="camera-header">
+                    <span class="camera-name">
+                        <span class="rec-dot" id="recDot"></span>
+                        <span id="cameraLabel">CAM-01 — Webcam</span>
+                    </span>
+                    <span class="camera-badge live">LIVE</span>
+                </div>
+                <div class="camera-viewport">
+                    <!-- Alert Overlay -->
+                    <div class="alert-overlay" id="alertOverlay">
+                        <div class="alert-banner">
+                            <span class="alert-icon">⚠️</span>
+                            <span class="alert-text">PERSON DETECTED — POSSIBLE THREAT</span>
+                        </div>
+                    </div>
+                    <video id="videoElement" autoplay muted playsinline></video>
+                    <canvas id="canvasOverlay"></canvas>
+                </div>
+                <div class="camera-footer">
+                    <span class="cam-stat"><span class="cam-stat-label">FPS</span> <span id="fpsValue">--</span></span>
+                        <span class="cam-stat"><span class="cam-stat-label">Persons</span> <span
+                            id="handsDetected">0</span></span>
+                    <span class="cam-stat"><span class="cam-stat-label">Confidence</span> <span
+                            id="confidenceValue">--</span></span>
+                    <span class="cam-stat"><span class="cam-stat-label">Resolution</span> <span
+                            id="resolutionValue">--</span></span>
+                </div>
+            </div>
+
+            <!-- Secondary cameras (live feeds from other devices) -->
+            <div class="camera-card secondary" id="secondaryCamera2">
+                <div class="camera-header">
+                    <span class="camera-name" id="cam2Name">CAM-02 — Connecting...</span>
+                    <span class="camera-badge offline" id="cam2Status">OFFLINE</span>
+                </div>
+                <div class="camera-viewport placeholder">
+                    <span class="placeholder-text">📷 No Signal</span>
+                    <img id="cam2Image" style="display: none; width: 100%; height: 100%; object-fit: cover;" />
+                </div>
+            </div>
+            <div class="camera-card secondary" id="secondaryCamera3">
+                <div class="camera-header">
+                    <span class="camera-name" id="cam3Name">CAM-03 — Connecting...</span>
+                    <span class="camera-badge offline" id="cam3Status">OFFLINE</span>
+                </div>
+                <div class="camera-viewport placeholder">
+                    <span class="placeholder-text">📷 No Signal</span>
+                    <img id="cam3Image" style="display: none; width: 100%; height: 100%; object-fit: cover;" />
+                </div>
+            </div>
+            <div class="camera-card secondary" id="secondaryCamera4">
+                <div class="camera-header">
+                    <span class="camera-name" id="cam4Name">CAM-04 — Connecting...</span>
+                    <span class="camera-badge offline" id="cam4Status">OFFLINE</span>
+                </div>
+                <div class="camera-viewport placeholder">
+                    <span class="placeholder-text">📷 No Signal</span>
+                    <img id="cam4Image" style="display: none; width: 100%; height: 100%; object-fit: cover;" />
+                </div>
+            </div>
+        </section>
+
+        <!-- Right: Control Panel + Alerts -->
+        <aside class="sidebar">
+            <!-- Stats Cards -->
+            <div class="stats-grid">
+                <div class="stat-card">
+                    <div class="stat-icon">🎯</div>
+                    <div class="stat-info">
+                        <span class="stat-number" id="detectionsToday">0</span>
+                        <span class="stat-label">Detections Today</span>
+                    </div>
+                </div>
+                <div class="stat-card">
+                    <div class="stat-icon">👁️</div>
+                    <div class="stat-info">
+                        <span class="stat-number" id="monitoringStatus">OFF</span>
+                        <span class="stat-label">Monitoring</span>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Controls -->
+            <div class="controls-section">
+                <button class="btn-monitor" id="btnMonitor">
+                    <span class="btn-icon">▶</span>
+                    <span class="btn-label">Start Monitoring</span>
+                </button>
+
+                <div class="slider-control">
+                    <div class="slider-header">
+                        <label>Sensitivity</label>
+                        <span id="sensitivityValue" class="slider-value">0.70</span>
+                    </div>
+                    <input type="range" id="sensitivitySlider" min="10" max="100" value="70" step="5" />
+                </div>
+
+                <div class="slider-control">
+                    <div class="slider-header">
+                        <label>Alert Cooldown</label>
+                        <span id="cooldownValue" class="slider-value">30s</span>
+                    </div>
+                    <input type="range" id="cooldownSlider" min="5" max="120" value="30" step="5" />
+                </div>
+            </div>
+
+            <!-- Recent Alerts Timeline -->
+            <div class="alerts-section">
+                <div class="section-header">
+                    <h3>🔔 Alert Timeline</h3>
+                    <span class="alert-count" id="alertCount">0</span>
+                </div>
+                <div class="alerts-list" id="alertsList">
+                    <div class="empty-alerts">
+                        <span class="empty-icon">🔇</span>
+                        <span>No alerts yet</span>
+                        <span class="empty-hint">Start monitoring to detect people</span>
+                    </div>
+                </div>
+            </div>
+        </aside>
+    </main>
+
+    <!-- ===== Settings Modal ===== -->
+    <div class="modal-overlay" id="settingsModal">
+        <div class="modal-card">
+            <div class="modal-header">
+                <h2>⚙️ Settings</h2>
+                <button class="modal-close" id="closeSettings">✕</button>
+            </div>
+            <form id="settingsForm">
+                <div class="form-group">
+                    <label>Backend WebSocket URL</label>
+                    <input type="text" id="settingWsUrl" placeholder="ws://localhost:3001/ws" />
+                </div>
+                <div class="form-group">
+                    <label>Camera Label</label>
+                    <input type="text" id="settingLabel" value="CAM-01 — Webcam" />
+                </div>
+                <div class="form-group">
+                    <label>Camera ID</label>
+                    <input type="text" id="settingCameraId" placeholder="Auto-generated" readonly />
+                </div>
+                <div class="form-row">
+                    <button type="button" class="btn-secondary" id="closeSettingsBtn">Cancel</button>
+                    <button type="submit" class="btn-primary">Save</button>
+                </div>
+            </form>
+        </div>
+    </div>
+
+    <!-- Load TensorFlow + MoveNet Pose Detection (17 keypoints) -->
+    <script src="https://cdn.jsdelivr.net/npm/@tensorflow/tfjs-core"></script>
+    <script src="https://cdn.jsdelivr.net/npm/@tensorflow/tfjs-converter"></script>
+    <script src="https://cdn.jsdelivr.net/npm/@tensorflow/tfjs-backend-webgl"></script>
+    <script src="https://cdn.jsdelivr.net/npm/@tensorflow-models/pose-detection"></script>
+    <script src="app.js"></script>
+</body>
+
+</html>

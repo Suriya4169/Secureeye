@@ -1,0 +1,131 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta http-equiv="Content-Security-Policy" content="default-src 'self' 'unsafe-inline' 'unsafe-eval'; connect-src *; img-src * data: blob:; media-src *; script-src 'self' 'unsafe-inline' 'unsafe-eval' https://cdn.jsdelivr.net;" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>SecureEye CCTV</title>
+  <link rel="stylesheet" href="../styles/app.css" />
+</head>
+<body>
+  <!-- Custom Title Bar -->
+  <div class="titlebar" id="titlebar">
+    <div class="titlebar-left">
+      <span class="logo">🛡️ SecureEye</span>
+      <span class="camera-label" id="cameraLabel">Camera</span>
+      <span class="camera-id-badge" id="cameraIdBadge"></span>
+    </div>
+    <div class="titlebar-center">
+      <span class="status-indicator" id="tailscaleStatus" title="Tailscale VPN">
+        <span class="dot offline"></span> VPN
+      </span>
+      <span class="status-indicator" id="wsStatus" title="Backend Connection">
+        <span class="dot offline"></span> Backend
+      </span>
+    </div>
+    <div class="titlebar-right">
+      <button class="titlebar-btn" onclick="secureeye.minimize()">─</button>
+      <button class="titlebar-btn" onclick="secureeye.maximize()">□</button>
+      <button class="titlebar-btn close" onclick="secureeye.close()">✕</button>
+    </div>
+  </div>
+
+  <!-- Setup Wizard (shown on first launch) -->
+  <div class="wizard-overlay" id="wizardOverlay" style="display: none;">
+    <div class="wizard-card">
+      <h1>🛡️ SecureEye Setup</h1>
+      <p class="wizard-subtitle">Configure this camera to connect to your SecureEye network</p>
+      <form id="setupForm">
+        <div class="form-group">
+          <label>Backend API URL</label>
+          <input type="text" id="wizardBackendUrl" placeholder="http://100.x.x.x:3000" required />
+        </div>
+        <div class="form-group">
+          <label>Organization ID</label>
+          <input type="text" id="wizardOrgId" placeholder="uuid-of-your-org" required />
+        </div>
+        <div class="form-group">
+          <label>Camera Label</label>
+          <input type="text" id="wizardLabel" placeholder="Front Door" required />
+        </div>
+        <div class="form-group">
+          <label>Location</label>
+          <input type="text" id="wizardLocation" placeholder="Ground Floor" />
+        </div>
+        <div class="form-group">
+          <label>Email</label>
+          <input type="email" id="wizardEmail" placeholder="your@email.com" required />
+        </div>
+        <div class="form-group">
+          <label>Password</label>
+          <input type="password" id="wizardPassword" placeholder="••••••••" required />
+        </div>
+        <div class="wizard-error" id="wizardError" style="display: none;"></div>
+        <button type="submit" class="btn-primary" id="wizardSubmit">Register Camera</button>
+      </form>
+    </div>
+  </div>
+
+  <!-- Main Camera View -->
+  <div class="main-container" id="mainContainer">
+    <div class="camera-area">
+      <!-- Alert Overlay -->
+      <div class="alert-overlay" id="alertOverlay" style="display: none;">
+        <div class="alert-content">
+          <span class="alert-icon">⚠️</span>
+          <span class="alert-text">HANDS DETECTED</span>
+        </div>
+      </div>
+      <!-- Video + Canvas -->
+      <video id="videoElement" autoplay muted playsinline></video>
+      <canvas id="canvasOverlay"></canvas>
+    </div>
+
+    <!-- Stats Bar -->
+    <div class="stats-bar">
+      <div class="stat">
+        <span class="stat-label">FPS</span>
+        <span class="stat-value" id="fpsValue">--</span>
+      </div>
+      <div class="stat">
+        <span class="stat-label">Detections Today</span>
+        <span class="stat-value" id="detectionsToday">0</span>
+      </div>
+      <div class="stat">
+        <span class="stat-label">Hands Detected</span>
+        <span class="stat-value" id="handsDetected">0</span>
+      </div>
+      <div class="stat">
+        <span class="stat-label">Monitoring</span>
+        <span class="stat-value monitoring-on" id="monitoringStatus">OFF</span>
+      </div>
+    </div>
+
+    <!-- Controls -->
+    <div class="controls-bar">
+      <button class="btn-monitor" id="btnMonitor" onclick="toggleMonitoring()">
+        ▶ Start Monitoring
+      </button>
+      <div class="sensitivity-control">
+        <label>Sensitivity</label>
+        <input type="range" id="sensitivitySlider" min="10" max="100" value="70" step="5" />
+        <span id="sensitivityValue">0.70</span>
+      </div>
+    </div>
+
+    <!-- Recent Alerts Panel -->
+    <div class="alerts-panel">
+      <h3>Recent Alerts</h3>
+      <div class="alerts-list" id="alertsList">
+        <div class="empty-alerts">No alerts yet</div>
+      </div>
+    </div>
+  </div>
+
+  <!-- Load MediaPipe from CDN -->
+  <script src="https://cdn.jsdelivr.net/npm/@mediapipe/hands/hands.js" crossorigin="anonymous"></script>
+  <script src="https://cdn.jsdelivr.net/npm/@mediapipe/camera_utils/camera_utils.js" crossorigin="anonymous"></script>
+  <script src="https://cdn.jsdelivr.net/npm/@mediapipe/drawing_utils/drawing_utils.js" crossorigin="anonymous"></script>
+  <script src="./renderer.js"></script>
+</body>
+</html>
