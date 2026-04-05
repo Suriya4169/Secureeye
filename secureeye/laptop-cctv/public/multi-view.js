@@ -6,12 +6,14 @@ import { initializeApp } from 'https://www.gstatic.com/firebasejs/10.12.0/fireba
 import { getAuth, onAuthStateChanged, signOut } from 'https://www.gstatic.com/firebasejs/10.12.0/firebase-auth.js';
 
 const firebaseConfig = {
-    apiKey: "AIzaSyC_mQv_KWKRb97JYp4prdexH22P8HLNONs",
-    authDomain: "mailreciver-af715.firebaseapp.com",
-    projectId: "mailreciver-af715",
-    storageBucket: "mailreciver-af715.firebasestorage.app",
-    messagingSenderId: "904479631615",
-    appId: "1:904479631615:web:a778f2175ea9d8e65344ca"
+    // FIREBASE CONFIG HAS BEEN REMOVED FOR SECURITY.
+    // Please load these from your backend or environment variables safely.
+    apiKey: "REMOVED",
+    authDomain: "REMOVED",
+    projectId: "REMOVED",
+    storageBucket: "REMOVED",
+    messagingSenderId: "REMOVED",
+    appId: "REMOVED"
 };
 
 const app = initializeApp(firebaseConfig);
