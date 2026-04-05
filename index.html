@@ -1,0 +1,378 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>SecureEye – AI CCTV Surveillance System</title>
+    <style>
+        :root {
+            --bg-color: #0b1120;
+            --card-bg: #1e293b;
+            --accent-cyan: #38bdf8;
+            --accent-green: #22c55e;
+            --text-main: #f8fafc;
+            --text-secondary: #94a3b8;
+        }
+
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+            font-family: 'Segoe UI', system-ui, -apple-system, sans-serif;
+        }
+
+        body {
+            background-color: var(--bg-color);
+            color: var(--text-main);
+            line-height: 1.6;
+            overflow-x: hidden;
+        }
+
+        /* Utility */
+        .container {
+            max-width: 1200px;
+            margin: 0 auto;
+            padding: 0 2rem;
+        }
+
+        .section-title {
+            text-align: center;
+            font-size: 2.5rem;
+            margin-bottom: 3rem;
+            color: var(--text-main);
+            position: relative;
+        }
+
+        .section-title::after {
+            content: '';
+            display: block;
+            width: 60px;
+            height: 4px;
+            background: var(--accent-cyan);
+            margin: 0.5rem auto 0;
+            border-radius: 2px;
+        }
+
+        section {
+            padding: 6rem 0;
+        }
+
+        /* Hero Section */
+        .hero {
+            height: 100vh;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            text-align: center;
+            position: relative;
+            background: radial-gradient(circle at center, #1e293b 0%, #0b1120 70%);
+        }
+
+        .hero::before {
+            content: '';
+            position: absolute;
+            top: 0; left: 0; right: 0; bottom: 0;
+            background: linear-gradient(180deg, rgba(11,17,32,0) 0%, var(--bg-color) 100%);
+            z-index: 1;
+        }
+
+        .hero-content {
+            z-index: 2;
+            animation: fadeIn 1s ease-out;
+        }
+
+        .hero h1 {
+            font-size: 4rem;
+            font-weight: 800;
+            letter-spacing: -1px;
+            margin-bottom: 1rem;
+            background: linear-gradient(to right, var(--text-main), var(--accent-cyan));
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+        }
+
+        .hero p {
+            font-size: 1.25rem;
+            color: var(--text-secondary);
+            margin-bottom: 2.5rem;
+            max-width: 600px;
+            margin-left: auto;
+            margin-right: auto;
+        }
+
+        .btn {
+            display: inline-block;
+            padding: 1rem 2rem;
+            background-color: var(--accent-cyan);
+            color: #0b1120;
+            font-weight: 600;
+            text-decoration: none;
+            border-radius: 50px;
+            transition: all 0.3s ease;
+            box-shadow: 0 4px 15px rgba(56, 189, 248, 0.4);
+        }
+
+        .btn:hover {
+            transform: translateY(-3px);
+            box-shadow: 0 6px 20px rgba(56, 189, 248, 0.6);
+            background-color: #7dd3fc;
+        }
+
+        /* Features Section */
+        .features-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
+            gap: 2rem;
+        }
+
+        .card {
+            background-color: var(--card-bg);
+            padding: 2.5rem;
+            border-radius: 20px;
+            box-shadow: 0 10px 30px rgba(0,0,0, 0.2);
+            transition: transform 0.3s ease, box-shadow 0.3s ease;
+            border: 1px solid rgba(255,255,255,0.05);
+        }
+
+        .card:hover {
+            transform: translateY(-10px);
+            box-shadow: 0 20px 40px rgba(0,0,0, 0.4);
+            border-color: rgba(56, 189, 248, 0.3);
+        }
+
+        .card-icon {
+            width: 50px;
+            height: 50px;
+            background: rgba(56, 189, 248, 0.1);
+            color: var(--accent-cyan);
+            border-radius: 12px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 1.5rem;
+            margin-bottom: 1.5rem;
+        }
+
+        .card h3 {
+            font-size: 1.25rem;
+            margin-bottom: 1rem;
+            color: var(--text-main);
+        }
+
+        .card p {
+            color: var(--text-secondary);
+            font-size: 0.95rem;
+        }
+
+        /* Architecture Section */
+        .arch-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(280px, 1fr));
+            gap: 2rem;
+            position: relative;
+        }
+
+        .arch-card {
+            text-align: center;
+            background: linear-gradient(145deg, var(--card-bg), #141c2b);
+            border-top: 4px solid var(--accent-green);
+        }
+
+        .arch-card .card-icon {
+            margin: 0 auto 1.5rem;
+            background: rgba(34, 197, 94, 0.1);
+            color: var(--accent-green);
+        }
+
+        /* Privacy Section */
+        .privacy-box {
+            background-color: rgba(30, 41, 59, 0.5);
+            border-left: 4px solid var(--accent-cyan);
+            border-radius: 0 15px 15px 0;
+            padding: 3rem;
+            backdrop-filter: blur(10px);
+        }
+
+        .privacy-list {
+            list-style: none;
+            margin-top: 1.5rem;
+        }
+
+        .privacy-list li {
+            margin-bottom: 1rem;
+            display: flex;
+            align-items: center;
+            color: var(--text-secondary);
+        }
+
+        .privacy-list li::before {
+            content: '✓';
+            color: var(--accent-green);
+            font-weight: bold;
+            margin-right: 1rem;
+            background: rgba(34, 197, 94, 0.1);
+            width: 24px;
+            height: 24px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            border-radius: 50%;
+        }
+
+        /* Contact Section */
+        .contact {
+            text-align: center;
+            background-color: #080c17;
+            padding: 5rem 0;
+        }
+
+        .contact-email {
+            display: inline-block;
+            font-size: 1.5rem;
+            color: var(--accent-cyan);
+            text-decoration: none;
+            margin-top: 1rem;
+            padding: 1rem 2rem;
+            border: 2px dashed rgba(56, 189, 248, 0.3);
+            border-radius: 12px;
+            transition: all 0.3s;
+        }
+
+        .contact-email:hover {
+            background: rgba(56, 189, 248, 0.05);
+            border-color: var(--accent-cyan);
+        }
+
+        /* Footer */
+        footer {
+            background-color: #05080f;
+            padding: 2rem;
+            text-align: center;
+            color: var(--text-secondary);
+            font-size: 0.9rem;
+            border-top: 1px solid rgba(255,255,255,0.05);
+        }
+
+        /* Animations */
+        @keyframes fadeIn {
+            from { opacity: 0; transform: translateY(20px); }
+            to { opacity: 1; transform: translateY(0); }
+        }
+
+        /* Responsive */
+        @media (max-width: 768px) {
+            .hero h1 { font-size: 2.5rem; }
+            .hero p { font-size: 1rem; }
+            section { padding: 4rem 0; }
+            .privacy-box { padding: 2rem; }
+        }
+    </style>
+</head>
+<body>
+
+    <!-- Hero Section -->
+    <header class="hero">
+        <div class="hero-content container">
+            <h1>SecureEye</h1>
+            <p>Real-time AI-powered surveillance with remote monitoring and smart alerts. Security redefined for the modern age.</p>
+            <a href="#features" class="btn">View Features</a>
+        </div>
+    </header>
+
+    <!-- Features Section -->
+    <section id="features" class="container">
+        <h2 class="section-title">Key Features</h2>
+        <div class="features-grid">
+            <div class="card">
+                <div class="card-icon">👁️</div>
+                <h3>Real-Time Human Detection</h3>
+                <p>Advanced AI utilizing TensorFlow.js instantly identifies humans in the camera feed, reducing false alarms.</p>
+            </div>
+            <div class="card">
+                <div class="card-icon">✉️</div>
+                <h3>Smart Email Alerts</h3>
+                <p>Instant email notifications are dispatched alongside snapshot evidence the moment a threat is detected.</p>
+            </div>
+            <div class="card">
+                <div class="card-icon">📱</div>
+                <h3>Remote Monitoring</h3>
+                <p>Your security is always in your pocket. Access alerts and control states securely through the mobile application.</p>
+            </div>
+            <div class="card">
+                <div class="card-icon">📊</div>
+                <h3>Live Web Dashboard</h3>
+                <p>A sophisticated, responsive web interface for managing active camera feeds and tracking detection metrics.</p>
+            </div>
+            <div class="card">
+                <div class="card-icon">⚡</div>
+                <h3>Fast Browser Processing</h3>
+                <p>Everything runs seamlessly in the browser. Zero cloud processing dependency ensures maximum speed and latency reduction.</p>
+            </div>
+        </div>
+    </section>
+
+    <!-- System Architecture -->
+    <section class="container">
+        <h2 class="section-title">System Architecture</h2>
+        <div class="arch-grid">
+            <div class="card arch-card">
+                <div class="card-icon">⚙️</div>
+                <h3>Backend</h3>
+                <p>A robust <strong>Node.js Server</strong> engineered to handle real-time API integrations, instant alert dispatching, and secure state management.</p>
+            </div>
+            <div class="card arch-card">
+                <div class="card-icon">💻</div>
+                <h3>Dashboard</h3>
+                <p>An interactive <strong>Web-based UI</strong> processing AI frame data locally, ensuring latency-free CCTV monitoring capabilities.</p>
+            </div>
+            <div class="card arch-card">
+                <div class="card-icon">📲</div>
+                <h3>Mobile App</h3>
+                <p>A cross-platform <strong>React Native (Expo)</strong> application serving as your remote command center for notifications and access.</p>
+            </div>
+        </div>
+    </section>
+
+    <!-- Privacy Section -->
+    <section class="container">
+        <div class="privacy-box">
+            <h2 style="color: var(--text-main); font-size: 2rem; margin-bottom: 1rem;">Privacy Built-in.</h2>
+            <p style="color: var(--text-secondary); font-size: 1.1rem;">We believe security shouldn't compromise privacy. SecureEye is architected with strict data isolation principles to ensure your footage belongs only to you.</p>
+            <ul class="privacy-list">
+                <li>AI processing happens strictly locally in your browser.</li>
+                <li>No continuous video footage is stored or uploaded to the cloud.</li>
+                <li>Only critical alert snapshots are temporarily transmitted as evidence.</li>
+                <li>Your data is never sold, traded, or shared with third parties.</li>
+            </ul>
+        </div>
+    </section>
+
+    <!-- Contact Section -->
+    <section class="contact">
+        <div class="container">
+            <h2 class="section-title" style="margin-bottom: 1rem;">Get In Touch</h2>
+            <p style="color: var(--text-secondary);">Interested in SecureEye? Reach out to us directly.</p>
+            <a href="mailto:siyassd69@gmail.com" class="contact-email">
+                siyassd69@gmail.com
+            </a>
+        </div>
+    </section>
+
+    <!-- Footer -->
+    <footer>
+        <p>Academic Project – SecureEye</p>
+    </footer>
+
+    <script>
+        // Smooth scrolling for Anchor Links
+        document.querySelectorAll('a[href^="#"]').forEach(anchor => {
+            anchor.addEventListener('click', function (e) {
+                e.preventDefault();
+                document.querySelector(this.getAttribute('href')).scrollIntoView({
+                    behavior: 'smooth'
+                });
+            });
+        });
+    </script>
+</body>
+</html>
